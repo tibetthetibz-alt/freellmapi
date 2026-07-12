@@ -24,7 +24,8 @@ mac:
   gatekeeperAssess: false
   entitlements: assets/entitlements.mac.plist
   entitlementsInherit: assets/entitlements.mac.inherit.plist
-  notarize: true
+  notarize: false
+  identity: null
   target:
     - target: dmg
       arch:
