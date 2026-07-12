@@ -15,8 +15,7 @@ Aggregate the free tiers from Google, Groq, Cerebras, NVIDIA, Mistral, OpenRoute
 
 **[freellmapi.co](https://freellmapi.co)** · browse all 161 free models on the live catalog
 
-Your router updates its own model catalog. Free installs get each new model 30 days after it ships;
-**[Premium gets it the day it lands, and is 79 models ahead right now](https://freellmapi.co/?utm_source=github&utm_medium=readme#pricing)** ($19/yr, cancel anytime).
+Your router updates its own model catalog automatically.
 
 ![Fallback chain with per-provider token budget](repo-assets/fallback-chain.png)
 
@@ -35,7 +34,7 @@ Your router updates its own model catalog. Free installs get each new model 30 d
 - [Docker](#docker)
 - [Desktop app](#desktop-app)
 - [Languages](#languages)
-- [Premium (live catalog)](#premium-live-catalog)
+- [Live Catalog](#live-catalog)
 - [Using the API](#using-the-api)
 - [Screenshots](#screenshots)
 - [How it works](#how-it-works)
@@ -51,7 +50,7 @@ Every serious AI lab now offers a free tier — a few million tokens a month, a 
 
 The problem is that stacking them by hand is painful: twenty-one different SDKs, twenty-one different rate limits, twenty-one places a request can fail. FreeLLMAPI collapses that into one OpenAI-compatible endpoint. Point any OpenAI client library at your local server, and it routes transparently across whichever providers you've added keys for.
 
-And the free-tier landscape shifts weekly: providers launch models, retire them, and change quotas without notice. FreeLLMAPI tracks all of that for you. The router pulls a signed model catalog from [freellmapi.co](https://freellmapi.co) on its own, so your install keeps up without a `git pull`. See [Premium (live catalog)](#premium-live-catalog) for how fast it keeps up.
+And the free-tier landscape shifts weekly: providers launch models, retire them, and change quotas without notice. FreeLLMAPI tracks all of that for you. The router pulls a signed model catalog from [freellmapi.co](https://freellmapi.co) on its own, so your install keeps up without a `git pull`.
 
 ## Supported providers
 
@@ -91,7 +90,7 @@ And the free-tier landscape shifts weekly: providers launch models, retire them,
 
 Plus a **custom** provider — point chat, embedding, image, or audio models at any OpenAI-compatible endpoint (llama.cpp, LM Studio, vLLM, a local Ollama, or a remote gateway) from the Keys page.
 
-Six more integrations — **Agnes AI, Reka, SiliconFlow, Routeway, BazaarLink, and AINative** — ship their models through the [live catalog](#premium-live-catalog): Premium routers serve them the day they land, free installs get them through the standard 30-day gate.
+Six more integrations — **Agnes AI, Reka, SiliconFlow, Routeway, BazaarLink, and AINative** — are managed via the [live catalog](#live-catalog).
 
 The full, always-current list lives at **[freellmapi.co/models](https://freellmapi.co/models.html)** with per-model rate limits, context windows, and free-token budgets.
 
@@ -103,7 +102,7 @@ The full, always-current list lives at **[freellmapi.co/models](https://freellma
 - **Anthropic Messages API** — `POST /v1/messages` (plus `/v1/messages/count_tokens`) speaks Anthropic's wire format over the same router, so **Claude Code** and the official Anthropic SDKs run against your free pool. `GET /v1/models` is content-negotiated (Anthropic shape when the client sends `anthropic-version`, OpenAI shape otherwise), and Claude families (`opus` / `sonnet` / `haiku` / `default`) map to `auto` or a pinned model on the Keys page. See [Anthropic / Claude clients](#anthropic--claude-clients).
 - **Fusion (multi-model synthesis)** — request the virtual `fusion` model and the router fans your prompt out to a panel of diverse free models in parallel, then a judge model synthesizes one answer from the drafts. Panel, judge, and strategy are configurable on the dashboard's **Fusion** page or per request via the `fusion` field; each sub-call goes through normal routing, quotas, and analytics.
 - **Image generation & text-to-speech** — `POST /v1/images/generations` and `POST /v1/audio/speech` route across the providers that serve media models, including custom OpenAI-compatible media endpoints. Browse and toggle them on the dashboard's **Models → Image / Audio** tabs.
-- **Self-updating model catalog** — the router syncs a signed catalog from freellmapi.co twice a day: new models, quota changes, and provider quirk fixes land in your install automatically. See [Premium (live catalog)](#premium-live-catalog).
+- **Self-updating model catalog** — the router syncs a signed catalog from freellmapi.co twice a day: new models, quota changes, and provider quirk fixes land in your install automatically.
 - **Streaming and non-streaming** — Server-Sent Events for `stream: true`, JSON response otherwise. Every provider adapter implements both.
 - **Tool calling** — OpenAI-style `tools` / `tool_choice` requests are passed through, and assistant `tool_calls` + `tool` role follow-up messages round-trip across providers. Models that emit tool calls as plain text instead of structured JSON are rescued into real `tool_calls` automatically, and tool requests only route to models that actually support them.
 - **Structured outputs & full sampling passthrough** — `response_format` (`json_object` / `json_schema`, translated to Gemini's native `responseSchema`), plus `seed`, `top_k`, `min_p`, presence/frequency/repetition penalties, `logit_bias`, `logprobs`, and the `max_completion_tokens` alias. Params a provider is known to reject are dropped per platform (Mistral's strict API, Groq's logprobs family…), and every model advertises its honest list in `/v1/models` `supported_parameters`.
@@ -459,7 +458,7 @@ FreeLLMAPI is local-first and single-user by design. Your provider keys stay in
 your SQLite database, encrypted at rest, and requests go from your machine to the
 upstream providers you enabled.
 
-## Premium (live catalog)
+## Live Catalog
 
 The router keeps its model catalog fresh on its own: it pulls a signed catalog
 from [freellmapi.co](https://freellmapi.co) twice a day and applies new models,
@@ -467,41 +466,10 @@ quota changes, and provider quirk fixes to your local DB. Your own
 enable/disable choices and custom providers are never touched, and every
 download is verified against a pinned Ed25519 key before it is applied.
 
-The catalog comes in two feeds:
-
-| | Free | Premium |
-|---|---|---|
-| Price | $0, forever | **$19/yr** or **$49 lifetime** |
-| Models served today (July 2026) | 82 | **161** |
-| New free models | 30 days after each one ships | **the day it ships** |
-| Quota changes and quirk fixes | on the same 30-day trail | within 2-3 days |
-| Activation | nothing to do | one key, all your devices |
-
-The gap is not hypothetical. Right now the live feed is **79 models ahead** of
-free installs, including Kimi K2.7 Code, GLM-5.2, MiniMax M3, Qwen3.5 397B, and
-Nemotron 3 Ultra 550B with a 1M-token context window. Each of those reaches free
-installs about a month after it shipped; Premium routers were already serving
-them on day one. Browse exactly what you're missing at
-**[freellmapi.co/models](https://freellmapi.co/models.html)**.
-
-Thirty days is a long time in this market. When a provider launches a strong
-new free model, quietly tightens a quota, or breaks a wire format, live-feed
-routers are patched within days while free installs wait for the model to age
-in. If you use your router every day, Premium is the difference between riding
-the free-tier wave and reading about it.
-
-**[Go live at freellmapi.co →](https://freellmapi.co/?utm_source=github&utm_medium=readme#pricing)**
-
-- $19/year or $49 once, lifetime. Stripe checkout; cancel anytime, self-serve.
-- One `fla_` key covers every router you run: desktop, homelab, Raspberry Pi.
-- Activate in the dashboard under **Premium**; cancel or manage billing
-  self-serve at [freellmapi.co/manage](https://freellmapi.co/manage).
-- The router itself stays MIT-licensed and fully free, forever. Premium is only
-  the live feed, and it's what funds the daily model testing and catalog
-  maintenance that keep both tiers working.
+Browse all available free models at **[freellmapi.co/models](https://freellmapi.co/models.html)**.
 
 The catalog server never sees your prompts, completions, or provider keys — the
-router stays fully self-hosted either way.
+router stays fully self-hosted.
 
 ## Using the API
 

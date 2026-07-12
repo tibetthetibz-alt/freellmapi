@@ -34,7 +34,6 @@ import AudioPage from '@/pages/AudioPage'
 import MediaDetailPage from '@/pages/MediaDetailPage'
 import EmbeddingDetailPage from '@/pages/EmbeddingDetailPage'
 import AnalyticsPage from '@/pages/AnalyticsPage'
-import PremiumPage from '@/pages/PremiumPage'
 import NotFoundPage from '@/pages/NotFoundPage'
 
 // Every failed mutation surfaces as an error toast, so no action fails
@@ -54,7 +53,6 @@ const navItems = [
   { to: '/playground', labelKey: 'nav.playground' },
   { to: '/keys', labelKey: 'nav.keys' },
   { to: '/analytics', labelKey: 'nav.analytics' },
-  { to: '/premium', labelKey: 'nav.premium' },
 ]
 
 // The five modality pages behind "Models"; surfaced in the nav dropdown and
@@ -338,7 +336,6 @@ function App() {
                 <Route path="/keys" element={<KeysPage />} />
                 <Route path="/fallback" element={<Navigate to="/models/chat" replace />} />
                 <Route path="/analytics" element={<AnalyticsPage />} />
-                <Route path="/premium" element={<PremiumPage />} />
                 <Route path="/test" element={<Navigate to="/playground" replace />} />
                 <Route path="/health" element={<Navigate to="/keys" replace />} />
                 <Route path="*" element={<NotFoundPage />} />

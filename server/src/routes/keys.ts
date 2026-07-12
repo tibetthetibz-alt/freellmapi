@@ -119,10 +119,7 @@ function insertImportedKey(platform: (typeof PLATFORMS)[number], keyName: string
 
 // Count enabled catalog models for a platform. Used to warn when a key is
 // added for a provider that has zero models in the operator's current catalog
-// tier — the Agnes case (#438): the provider is registered and selectable, but
-// its models ship in the premium/live catalog and only appear for free-tier
-// installs once they age into the monthly catalog, so a fresh install adds the
-// key and silently sees nothing.
+// tier — the key is saved but no models appear yet.
 function enabledModelCount(platform: string): number {
   const db = getDb();
   const row = db.prepare(
@@ -137,10 +134,9 @@ function noModelsNotice(platform: string): string | undefined {
   if (enabledModelCount(platform) > 0) return undefined;
   return (
     `Key saved, but no ${platform} models are in your current catalog yet. ` +
-    `Newer providers are published to the premium catalog first and appear ` +
-    `for free-tier installs once they age into the monthly catalog. Add a ` +
-    `Premium license key to use them now, or add ${platform} as a custom ` +
-    `OpenAI-compatible provider with its base URL.`
+    `Models appear after the catalog syncs (within 12 hours). If none ` +
+    `appear, add ${platform} as a custom OpenAI-compatible provider ` +
+    `with its base URL from the Keys page.`
   );
 }
 

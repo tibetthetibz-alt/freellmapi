@@ -86,14 +86,14 @@ export type Platform =
   // ainative.studio.
   | 'ainative'
   // Aion Labs — OpenAI-compatible aggregator with a no-card free API key.
-  // Catalog rows live in the Oracle catalog (premium now, free after 30 days).
+  // Catalog rows live in the Oracle catalog.
   | 'aion'
   // Requesty — OpenAI-compatible router with no-card free models/credits.
-  // Catalog rows live in the Oracle catalog (premium now, free after 30 days).
+  // Catalog rows live in the Oracle catalog.
   | 'requesty'
   // NaraRouter — OpenAI-compatible aggregator. Free account key from
   // router.bynara.id after Telegram channel/link verification; free-plan routes
-  // reset daily and are catalog-managed (premium now, free after 30 days).
+  // reset daily and are catalog-managed.
   | 'nara'
   // AI Horde — free, community-powered inference (volunteer workers) via an
   // OpenAI-compatible proxy (https://oai.aihorde.net/v1). Queue-based, so calls

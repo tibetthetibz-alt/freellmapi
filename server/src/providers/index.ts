@@ -205,7 +205,7 @@ register(new OpenAICompatProvider({
 // "during this period"), and there is a paid Token/Unlimited subscription
 // underneath, so watch for reversion to paid. ~30 concurrent requests succeed
 // before 429s (no documented RPM/RPD). Free key from platform.agnes-ai.com,
-// no card. Catalog rows live in the catalog (premium → age into free); not
+// no card. Catalog rows live in the Oracle catalog; not
 // shipped as freeapi model migrations.
 // agnes-2.0-flash reasons before answering (live-probed 20s TTFB on a
 // one-word completion, 2026-07-11), so the default 15s timeout aborted it;
@@ -227,7 +227,7 @@ register(new OpenAICompatProvider({
 // calls succeed with no 402. The OpenAI-compatible /v1/models lists two models:
 // reka-flash-3 (text reasoning) and reka-edge-2603 (natively multimodal —
 // accepts image/video input). Balance is dashboard-only (no credits API).
-// Catalog rows live in the catalog (premium → age into free); they are NOT
+// Catalog rows live in the Oracle catalog; they are NOT
 // shipped as freeapi model migrations.
 register(new OpenAICompatProvider({
   platform: 'reka',
@@ -239,7 +239,7 @@ register(new OpenAICompatProvider({
 // for its FREE generative-media models (FLUX.1-schnell image, CosyVoice2 TTS),
 // which route via services/media.ts; OpenAI-compatible chat is supported too.
 // Key from siliconflow.com, no card; validateKey uses GET /v1/models (200 with
-// a valid key). Catalog rows live in the catalog (premium → age into free).
+// a valid key). Catalog rows live in the Oracle catalog.
 register(new OpenAICompatProvider({
   platform: 'siliconflow',
   name: 'SiliconFlow',
@@ -251,7 +251,7 @@ register(new OpenAICompatProvider({
 // 20 rpm / 200 rpd, but a live test on 2026-06-26 observed a stricter 5 rpm).
 // Cloudflare in front rejects non-browser User-Agents with error 1010, so a
 // browser-style UA is required. Free key from routeway.ai (no card). Catalog
-// rows live in the catalog (premium → age into free).
+// rows live in the Oracle catalog.
 register(new OpenAICompatProvider({
   platform: 'routeway',
   name: 'Routeway',
@@ -277,7 +277,7 @@ register(new OpenAICompatProvider({
 // Advertises a recurring ~10M tokens/month free allocation (no card), though
 // its own pages disagree on scale; treat the quota as unverified until a real
 // account confirms it. Bearer auth works (X-API-Key also accepted). Catalog
-// rows live in the catalog (premium → age into free).
+// rows live in the Oracle catalog.
 register(new OpenAICompatProvider({
   platform: 'ainative',
   name: 'AINative Studio',
@@ -286,7 +286,7 @@ register(new OpenAICompatProvider({
 
 // Aion Labs — OpenAI-compatible aggregator (api.aionlabs.ai/v1). Free key from
 // aionlabs.ai (no card); recurring free availability is catalog-managed so
-// premium users see rows immediately and free users get them after 30 days.
+// all users see rows immediately.
 register(new OpenAICompatProvider({
   platform: 'aion',
   name: 'Aion Labs',
@@ -306,8 +306,7 @@ register(new OpenAICompatProvider({
 // requires a no-card API key plus Telegram channel/link verification. Live
 // probed 2026-07-09: `mistral-large`, `mistral-medium-3-5`, and `tencent-hy3`
 // answered 200 with a zero-balance account; the rest of /v1/models was
-// credit- or plan-gated. Catalog rows live in the Oracle catalog (premium now,
-// free after the 30-day model-age gate).
+// credit- or plan-gated. Catalog rows live in the Oracle catalog.
 register(new OpenAICompatProvider({
   platform: 'nara',
   name: 'NaraRouter',
