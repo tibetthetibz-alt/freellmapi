@@ -138,6 +138,31 @@ The scope is deliberately narrow. If a feature isn't on this list and isn't belo
 
 PRs that add any of these are very welcome. See [Contributing](#contributing).
 
+## Dynamic API Key Management & Usage Monitoring
+
+This fork adds capabilities for dynamic monitoring of API key usage limits and automatic key management across all supported providers.
+
+### Key Features
+
+- **Provider Coverage:** Manage API keys for all supported providers including Google, Groq, Cerebras, NVIDIA NIM, Mistral, OpenRouter, GitHub Models, Cohere, Cloudflare Workers AI, Zhipu AI (Z.ai), HuggingFace Router, Ollama Cloud, Kilo Gateway, Pollinations, LLM7, OVH AI Endpoints, AI Horde, OpenCode Zen, Agnes AI, Reka, SiliconFlow, Routeway, BazaarLink, AINative Studio, Aion Labs, Requesty, NaraRouter, and custom endpoints.
+
+- **Usage Limit Monitoring:** For providers that expose usage data via API endpoints, the system can periodically check remaining token/request budgets and update the dashboard display.
+
+- **Automatic Key Pausing:** When rate limits are reached or session breaks are enforced, the system automatically pauses that API key for the required cooldown period (typically 5 hours for session-based quotas) and re-enables it when limits reset.
+
+- **Hourly Status Updates:** The admin dashboard is updated hourly with remaining API key limits for each provider where usage data is available.
+
+- **Reactive Cooldowns:** For providers without usage APIs, the system reacts to HTTP 429 (rate limit) responses and implements cooldown periods with automatic re-enablement.
+
+### Usage
+
+Configure your API keys on the dashboard **Keys** page for each provider you want to use. The system tracks usage across all providers and automatically manages fallback behavior when limits are reached.
+
+### Limitations
+
+- **API Availability Dependent:** Dynamic limit checking is only as reliable as each provider's support for usage querying APIs. Many providers enforce rate limits silently via 429 responses without exposing remaining budget.
+- **Best-Effort Monitoring:** Quota tracking is best-effort and may not perfectly reflect server-side limits for all providers.
+
 ## Quick start
 
 **One-liner** (Docker required — sets up `~/freellmapi`, generates an encryption key, pulls the image, and starts the container):
