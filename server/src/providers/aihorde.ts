@@ -65,7 +65,7 @@ export class AIHordeProvider extends BaseProvider {
   /** Works out of the box via the anonymous key: the gateway stores a sentinel
    * row (so routing treats the platform as configured) and we send the anon
    * bearer. A stored real horde key replaces the sentinel for higher priority. */
-  keyless = false;
+  keyless = true;
   private readonly baseUrl = 'https://oai.aihorde.net/v1';
 
   /** Map the stored credential to the bearer we send upstream. The keyless flow
