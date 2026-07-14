@@ -52,7 +52,7 @@ export const PLATFORMS: { value: Platform; label: string; url: string; keyless?:
   { value: 'aion', label: 'Aion Labs (free key)', url: 'https://www.aionlabs.ai' },
   { value: 'requesty', label: 'Requesty (free key)', url: 'https://www.requesty.ai' },
   { value: 'nara', label: 'NaraRouter (free key)', url: 'https://router.bynara.id' },
-  { value: 'aihorde', label: 'AI Horde (no key needed, slow)', url: 'https://aihorde.net/register', keyless: true },
+  { value: 'aihorde', label: 'AI Horde (free key)', url: 'https://aihorde.net/register' },
 ]
 
 // 'custom' is configured through its own form (base URL + model), not the
